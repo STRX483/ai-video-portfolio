@@ -12,7 +12,7 @@ export const VIDEOS = [
     aspect: "16:9",
     title: "PROJECT 01",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "An opening visual sequence created for the HSE University × Samokat collaborative fashion show. The project reimagines the Russian capital as a fluid, living dreamscape. Drawing inspiration from the reality-bending, kaleidoscopic geometry of Doctor Strange, the visuals capture a neural metropolis where architecture folds, shifts, and breathes in sync with the runway.",
   },
   {
     id: 2, // 🔗 https://youtu.be/3Mmd3jWJJ6Q
@@ -21,7 +21,7 @@ export const VIDEOS = [
     aspect: "21:9",
     title: "PROJECT 02",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.",
+      "Grounded in archival reality, this video uses media archaeology to trace the invisible lines connecting yesterday's covert history to today's consequences. It’s part political thriller, part dark satire: a trio of hazy, misguided protagonists decide to spark a revolution in West Africa. But as the plot spirals out of control, the visuals reveal a deeper truth—that the ghosts of old conflicts never truly stay buried, and some games are far too big to play.",
   },
   {
     id: 3, // 🔗 https://youtu.be/QeriQ3iNwM0
@@ -30,7 +30,7 @@ export const VIDEOS = [
     aspect: "21:9",
     title: "PROJECT 03",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+      "Digital resistance transformed into a fierce, stylized battle. This aggressive protest music video visualizes the fight for an open web through a literal, chaotic showdown between a punk protagonist and an omnipresent, state-backed censorship entity. Pure, unfiltered counter-culture energy targeting the forces that try to disconnect us.",
   },
   {
     id: 4, // 🔗 https://youtu.be/QrXgJOJOpBE
@@ -41,7 +41,7 @@ export const VIDEOS = [
     aspect: "16:9",
     title: "PROJECT 04",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quis sem at nibh elementum imperdiet.",
+      "Real-world nostalgia meets deep-sea cyberpunk. This remastered visual sequence fuses the gritty, high-stakes action of RoboCop with a luminous, physics-defying underwater universe.It’s a vivid collision of 80s action cinema grit and deep-sea sci-fi aesthetics.",
   },
   {
     id: 5, // 🔗 https://youtu.be/rduMk3esRo4
@@ -50,7 +50,7 @@ export const VIDEOS = [
     aspect: "16:9",
     title: "PROJECT 05",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas mattis. Sed convallis tristique sem.",
+      "An AI-driven visual transformation developed at Mago Studio for Elena Kiper’s project Po Klassike 2.0. For this piece, my role went far beyond the digital canvas. Alongside developing the core neural restyling, I designed and animated the dynamic intro and outro sequences, and embedded with the production crew on set during live filming. A true hybrid project blending advanced post-production pipelines with hands-on filmmaking.",
   },
   {
     id: 6, // 🔗 https://youtu.be/pcF3lqV2nQE (swapped with old #4)
@@ -59,7 +59,7 @@ export const VIDEOS = [
     aspect: "16:9",
     title: "PROJECT 06",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut ligula vel nunc egestas porttitor.",
+      "A monumental 3D projection mapping concept that transforms the historic Pavilion of Venus into a living canvas for St. Petersburg’s 'Night of Light' festival. The piece explores the friction between classical stone heritage and hyper-modern digital fluidity. To achieve this, the workflow merges generative neural video with intricate, procedural Houdini simulations, wrapping the physical architecture in a shifting skin of simulated physics and liquid light",
   },
 ];
 
