@@ -33,7 +33,7 @@ export default function Overlay({ progress }) {
           </p>
         </header>
 
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-start gap-6 md:items-center">
           {/* Scroll progress line */}
           <div className="h-px w-40 bg-white/10">
             <div
@@ -41,7 +41,9 @@ export default function Overlay({ progress }) {
               style={{ width: `${Math.round(progress * 100)}%` }}
             />
           </div>
-          <footer className="flex w-full items-end justify-between">
+          {/* Mobile: stacked & left-aligned (© line first, CONTACT below).
+              Desktop (md+): one row, corners — unchanged. */}
+          <footer className="flex w-full flex-col items-start gap-3 text-left md:flex-row md:items-end md:justify-between">
             <p className="font-mono text-[10px] tracking-[0.3em] text-neutral-600">
               © 2026 — ALL WORK GENERATED &amp; DIRECTED BY SAINT RANDOM
             </p>
