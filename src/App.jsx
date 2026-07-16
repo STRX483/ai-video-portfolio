@@ -2,10 +2,16 @@ import { useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { MAX_SCROLL } from "./config/videos";
+import { IS_TOUCH } from "./lib/device";
 import Scene from "./components/Scene";
 import Splash from "./components/Splash";
 import Overlay from "./components/Overlay";
 import ProjectModal from "./components/ProjectModal";
+
+// Drag/swipe speed: one full screen-width of travel ≈ the whole gallery.
+// Scales with viewport width, so a finger swipe on a phone moves as far
+// as a mouse drag on a big monitor.
+const DRAG_SPEED = 18;
 
 export default function App() {
   const [booted, setBooted] = useState(false);
@@ -56,7 +62,8 @@ export default function App() {
       lastX = e.clientX;
       moved += Math.abs(dx);
       const s = scrollRef.current;
-      s.target = THREE.MathUtils.clamp(s.target - dx * 0.011, 0, MAX_SCROLL);
+      const k = DRAG_SPEED / Math.max(window.innerWidth, 320);
+      s.target = THREE.MathUtils.clamp(s.target - dx * k, 0, MAX_SCROLL);
       setProgress(MAX_SCROLL ? s.target / MAX_SCROLL : 0);
     };
     const onUp = () => {
@@ -93,7 +100,10 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-black">
+    <div
+      className="h-screen w-screen overflow-hidden bg-black"
+      style={{ touchAction: "none" }}
+    >
       <Splash done={booted} />
       <Overlay progress={progress} />
 
@@ -107,8 +117,8 @@ export default function App() {
       >
         <Canvas
           camera={{ position: [0, 0.1, 8.4], fov: 44 }}
-          gl={{ antialias: true }}
-          dpr={[1, 2]}
+          gl={{ antialias: !IS_TOUCH, powerPreference: "high-performance" }}
+          dpr={IS_TOUCH ? [1, 1.5] : [1, 2]}
         >
           <Scene scrollRef={scrollRef} onOpen={(v) => setActive(v)} />
         </Canvas>

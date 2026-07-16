@@ -1,17 +1,25 @@
 import { useRef, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { IS_TOUCH } from "../lib/device";
 
 /* ─────────────────────────────────────────────
    Flowing liquid background that follows the cursor.
+
+   DESKTOP: live animated shader (unchanged).
+   MOBILE (touch devices): the very same shader is rendered ONCE
+   into a texture at load — identical look, zero per-frame GPU cost.
+
    Tuning knobs:
    - SPEED: base flow speed of the liquid
    - BRIGHTNESS: overall glow level (0.5 subtle → 1.2 bold)
    - MOUSE_GLOW: strength of the glowing pool under the cursor
+   - FROZEN_TIME: which "moment" of the flow mobile users see
    ───────────────────────────────────────────── */
 const SPEED = 0.04;
 const BRIGHTNESS = 0.7;
 const MOUSE_GLOW = 0.75;
+const FROZEN_TIME = 2.2;
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -90,7 +98,8 @@ const fragmentShader = /* glsl */ `
   }
 `;
 
-export default function LiquidBackground() {
+/* Desktop: live animated liquid (unchanged behavior) */
+function LiveLiquid() {
   const mat = useRef();
   const mouseTarget = useRef(new THREE.Vector2(0.5, 0.5)).current;
   const uniforms = useMemo(
@@ -124,4 +133,48 @@ export default function LiquidBackground() {
       />
     </mesh>
   );
+}
+
+/* Mobile: the same shader baked ONCE into a texture at load.
+   Identical colors and shapes — but the expensive fragment shader
+   never runs again, so the GPU is free for scrolling. */
+function FrozenLiquid() {
+  const { gl } = useThree();
+  const texture = useMemo(() => {
+    const rt = new THREE.WebGLRenderTarget(1024, 576);
+    const scene = new THREE.Scene();
+    const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const quad = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 2),
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uTime: { value: FROZEN_TIME },
+          uBrightness: { value: BRIGHTNESS },
+          uMouseGlow: { value: MOUSE_GLOW * 0.6 },
+          // A gentle glowing pool just below center, as if the cursor rested there
+          uMouse: { value: new THREE.Vector2(0.5, 0.42) },
+        },
+        vertexShader,
+        fragmentShader,
+      }),
+    );
+    scene.add(quad);
+    const prev = gl.getRenderTarget();
+    gl.setRenderTarget(rt);
+    gl.render(scene, cam);
+    gl.setRenderTarget(prev);
+    quad.geometry.dispose();
+    quad.material.dispose();
+    return rt.texture;
+  }, [gl]);
+  return (
+    <mesh position={[0, 0.5, -16]}>
+      <planeGeometry args={[52, 30]} />
+      <meshBasicMaterial map={texture} depthWrite={false} />
+    </mesh>
+  );
+}
+
+export default function LiquidBackground() {
+  return IS_TOUCH ? <FrozenLiquid /> : <LiveLiquid />;
 }
