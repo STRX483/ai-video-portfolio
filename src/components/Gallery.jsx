@@ -7,7 +7,7 @@ import VideoScreen from "./VideoScreen";
 /* Horizontal curtain-scrolling row of screens.
    Positions come precomputed from videos.js (edge-to-edge spacing),
    and every plate sits on the same y — one clean aligned line. */
-export default function Gallery({ scrollRef, onOpen }) {
+export default function Gallery({ scrollRef, onOpen, paused }) {
   const group = useRef();
   useFrame((_, delta) => {
     const s = scrollRef.current;
@@ -26,6 +26,7 @@ export default function Gallery({ scrollRef, onOpen }) {
           video={video}
           baseX={X_POSITIONS[i]}
           onOpen={onOpen}
+          paused={paused}
         />
       ))}
     </group>

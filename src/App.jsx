@@ -119,8 +119,17 @@ export default function App() {
           camera={{ position: [0, 0.1, 8.4], fov: 44 }}
           gl={{ antialias: !IS_TOUCH, powerPreference: "high-performance" }}
           dpr={IS_TOUCH ? [1, 1.5] : [1, 2]}
+          /* Freeze the whole 3D render loop while a project is open — the
+             world is blurred behind the modal anyway, so the last frame is
+             kept as a static image and the GPU is left to the video player.
+             Resumes as soon as the modal starts closing. */
+          frameloop={active && !closing ? "never" : "always"}
         >
-          <Scene scrollRef={scrollRef} onOpen={(v) => setActive(v)} />
+          <Scene
+            scrollRef={scrollRef}
+            onOpen={(v) => setActive(v)}
+            paused={!!active}
+          />
         </Canvas>
       </div>
 

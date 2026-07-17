@@ -3,7 +3,7 @@ import LiquidBackground from "./LiquidBackground";
 import Gallery from "./Gallery";
 import CameraRig from "./CameraRig";
 
-export default function Scene({ scrollRef, onOpen }) {
+export default function Scene({ scrollRef, onOpen, paused }) {
   return (
     <>
       <color attach="background" args={["#000000"]} />
@@ -44,7 +44,7 @@ export default function Scene({ scrollRef, onOpen }) {
         color="#9aa4b8"
       />
 
-      <Gallery scrollRef={scrollRef} onOpen={onOpen} />
+      <Gallery scrollRef={scrollRef} onOpen={onOpen} paused={paused} />
       <CameraRig />
     </>
   );

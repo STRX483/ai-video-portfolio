@@ -66,7 +66,7 @@ function Poster({ video, hovered, onImage }) {
   );
 }
 
-export default function VideoScreen({ video, baseX, onOpen }) {
+export default function VideoScreen({ video, baseX, onOpen, paused }) {
   const [hovered, setHovered] = useState(false);
   const group = useRef();
   const focusRef = useRef(false); // last mobile-focus value (avoids re-render spam)
@@ -143,8 +143,11 @@ export default function VideoScreen({ video, baseX, onOpen }) {
               transition: "box-shadow 0.7s ease",
             }}
           >
-            {/* Muted autoplay preview — mounts only while hovering */}
-            {hovered && (
+            {/* Muted autoplay preview — mounts only while hovering.
+                Unmounted while a project modal is open (paused), so the
+                hidden preview never decodes video behind the fullscreen
+                player. */}
+            {hovered && !paused && (
               <iframe
                 src={previewSrc(video)}
                 title={video.title}
