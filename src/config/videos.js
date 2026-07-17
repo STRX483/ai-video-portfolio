@@ -4,6 +4,8 @@
    poster: optional thumbnail URL. Recommended for Kinescope videos
            (Kinescope has no public auto-thumbnail).
    ═══════════════════════════════════════════════════════════ */
+import { IS_TOUCH } from "../lib/device";
+
 export const VIDEOS = [
   {
     id: 1, // 🔗 https://youtu.be/bruN55lISFg
@@ -68,12 +70,14 @@ export const BASE_H = 2.0; // shared plate HEIGHT in world units — raise to sc
 export const GAP = 1.15; // empty space between plate EDGES (constant, whatever the aspect)
 
 // Plate width in world units, derived from its aspect ratio
-export const widthOf = (v) =>
-  BASE_H * (v.aspect === "21:9" ? 21 / 9 : 16 / 9);
+export const widthOf = (v) => BASE_H * (v.aspect === "21:9" ? 21 / 9 : 16 / 9);
 
 /* Cumulative x positions: each plate is placed after the previous one's
    edge + GAP, so plates can NEVER overlap — even when 21:9 and 16:9 mix.
-   The row is offset so plate #2 sits at x = 0 (first three centered on load). */
+   Desktop: the row is offset so plate #2 sits at x = 0 (first three centered
+   on load). Mobile (touch): only ~one plate fits the narrow screen, so plate
+   #1 is centered instead — otherwise the site opens on PROJECT 02 and
+   PROJECT 01 is unreachable (scroll is clamped at 0). */
 export const X_POSITIONS = (() => {
   let cursor = 0;
   const centers = VIDEOS.map((v) => {
@@ -82,7 +86,7 @@ export const X_POSITIONS = (() => {
     cursor += w + GAP;
     return center;
   });
-  const offset = centers[1] ?? 0;
+  const offset = (IS_TOUCH ? centers[0] : centers[1]) ?? 0;
   return centers.map((c) => c - offset);
 })();
 

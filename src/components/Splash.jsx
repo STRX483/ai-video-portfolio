@@ -12,8 +12,8 @@ export default function Splash({ done }) {
         </svg>
         <img
           src="/saint-random-logo.svg"
-          alt="Saint Random"
           className="absolute inset-0 m-auto h-11 w-11 object-contain"
+          alt="Saint Random"
         />
       </div>
       <p className="mt-6 font-mono text-[10px] tracking-[0.5em] text-neutral-500">

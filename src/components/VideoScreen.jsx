@@ -2,7 +2,14 @@ import { useState, useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html, Float } from "@react-three/drei";
 import * as THREE from "three";
-import { BASE_H, GRAIN, posterCandidates, previewSrc } from "../config/videos";
+import {
+  BASE_H,
+  GAP,
+  GRAIN,
+  posterCandidates,
+  previewSrc,
+} from "../config/videos";
+import { IS_TOUCH } from "../lib/device";
 import { extractGlowColors } from "../lib/three-utils";
 import AmbientGlow from "./AmbientGlow";
 
@@ -62,6 +69,7 @@ function Poster({ video, hovered, onImage }) {
 export default function VideoScreen({ video, baseX, onOpen }) {
   const [hovered, setHovered] = useState(false);
   const group = useRef();
+  const focusRef = useRef(false); // last mobile-focus value (avoids re-render spam)
   const worldPos = useRef(new THREE.Vector3()).current;
   // Thumbnail colors for the ambient glow (fallback until the poster loads)
   const [glowColors, setGlowColors] = useState(null);
@@ -79,6 +87,20 @@ export default function VideoScreen({ video, baseX, onOpen }) {
     if (!g) return;
     g.getWorldPosition(worldPos);
     const x = worldPos.x;
+
+    /* Mobile "field of view" focus: phones have no cursor, so the plate
+       closest to the screen center (where the eye naturally rests) gets the
+       same unblur + zoom + glow treatment as a desktop hover. Neighbouring
+       centers sit exactly w1/2 + GAP + w2/2 apart, so |x| < W/2 + GAP/2 is
+       true for at most ONE plate at any scroll position. */
+    if (IS_TOUCH) {
+      const focused = Math.abs(x) < W / 2 + GAP / 2;
+      if (focused !== focusRef.current) {
+        focusRef.current = focused;
+        setHovered(focused);
+      }
+    }
+
     const k = 1 - Math.pow(0.001, delta);
     g.rotation.y = THREE.MathUtils.lerp(
       g.rotation.y,
@@ -103,8 +125,8 @@ export default function VideoScreen({ video, baseX, onOpen }) {
           zIndexRange={[10, 0]}
         >
           <div
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
+            onMouseEnter={() => !IS_TOUCH && setHovered(true)}
+            onMouseLeave={() => !IS_TOUCH && setHovered(false)}
             onClick={() => onOpen(video)}
             style={{
               width: `${pxW}px`,
